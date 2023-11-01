@@ -1,0 +1,169 @@
+# This is an alpha version to allow testing for Hungarian smart meters. 
+# Use at your own risk, there's no guarantee this will work!
+# Relies on esphome custom component created by https://github.com/afarago/dsmr
+
+substitutions:
+  device_name: bakerflow-p1-primo
+  device_description: "Bakerflow P1 Primo: real-time monitoring of your energy usage"
+  friendly_name: Bakerflow P1 Primo
+  project_name: bakerflow.p1_primo
+  version: 2.3.0
+
+esphome:
+  name: ${device_name}
+  comment: "${device_description}" 
+  project: 
+    name: ${project_name}
+    version: ${version}
+  platformio_options:
+    upload_speed: 921600
+    platform: espressif32@5.3.0
+    
+esp32:
+  board: esp32-c3-devkitm-1
+  framework: 
+    type: arduino
+    version: 2.0.6
+
+# Cloned from https://github.com/afarago/dsmr
+external_components:
+  - source: github://bakermat/esphome
+    components: [dsmr]
+
+# Enable status LED - will flash without connection to ESPHome
+status_led:
+  pin:
+    number: 7
+
+api:
+
+ota:
+
+wifi:
+
+# Enable captive portal after 60 seconds of no Wi-Fi connection.
+# Uses channel 11 by default.
+  ap:
+    ssid: ${device_name}
+    channel: 11
+    ap_timeout: 60s
+
+captive_portal:
+
+# Enable web interface to view stats
+web_server:
+  port: 80
+  
+# Enable debug logging for live view of P1 sensor data
+logger:
+  #hardware_uart: USB_SERIAL_JTAG
+  level: DEBUG
+
+# Setup UART to receive data
+uart:
+  baud_rate: 115200
+  # This might need to be increased to 3000 to accommodate the telegram length
+  rx_buffer_size: 1700
+  rx_pin:
+    number: 10
+    inverted: true
+
+dsmr:
+ id: dsmr_instance
+ # Change telegram length to cater for larger telegrams in HU
+ max_telegram_length: 3000
+ receive_timeout: 200ms
+
+sensor:
+  - platform: dsmr
+    energy_delivered:
+      name: "${device_friendly_name} Energy Consumed"
+    energy_delivered_tariff1:
+      name: "${device_friendly_name} Energy Consumed Tariff 1"
+    energy_delivered_tariff2:
+      name: "${device_friendly_name} Energy Consumed Tariff 2"
+    energy_returned:
+      name: "${device_friendly_name} Energy Produced"
+    energy_returned_tariff1:
+      name: "${device_friendly_name} Energy Produced Tariff 1"
+    energy_returned_tariff2:
+      name: "${device_friendly_name} Energy Produced Tariff 2"
+    power_delivered:
+      name: "${device_friendly_name} Power Consumed"
+    power_returned:
+      name: "${device_friendly_name} Power Produced"
+    # electricity_threshold: # missing unit
+    #   name: "${device_friendly_name} Electricity Threshold"
+    electricity_tariff:
+      name: "${device_friendly_name} Electricity Tariff"
+    frequency:
+      name: "${device_friendly_name} Frequency"
+    energy_absolute:
+      name: "${device_friendly_name} Absolute active energy"
+      
+    voltage_l1:
+      name: "${device_friendly_name} Voltage Phase 1"
+    voltage_l2:
+      name: "${device_friendly_name} Voltage Phase 2"
+    voltage_l3:
+      name: "${device_friendly_name} Voltage Phase 3"
+    current_l1:
+      name: "${device_friendly_name} Current Phase 1"
+    current_l2:
+      name: "${device_friendly_name} Current Phase 2"
+    current_l3:
+      name: "${device_friendly_name} Current Phase 3"
+
+    # reactive_energy_qi:
+    #   name: "${device_friendly_name} Reactive Energy QI"
+    # reactive_energy_qii:
+    #   name: "${device_friendly_name} Reactive Energy QII"
+    # reactive_energy_qiii:
+    #   name: "${device_friendly_name} Reactive Energy QIII"
+    # reactive_energy_qiv:
+    #   name: "${device_friendly_name} Reactive Energy QIV"
+    # instantaneous_power_factor:
+    #   name: "${device_friendly_name} Instantaneous Power Factor"
+    # instantaneous_power_factor_l1:
+    #   name: "${device_friendly_name} Instantaneous Power Factor Phase 1"
+    # instantaneous_power_factor_l2:
+    #   name: "${device_friendly_name} Instantaneous Power Factor Phase 2"
+    # instantaneous_power_factor_l3:
+    #   name: "${device_friendly_name} Instantaneous Power Factor Phase 3"
+    # reactive_power_qi:
+    #   name: "${device_friendly_name} Reactive Power QI"
+    # reactive_power_qii:
+    #   name: "${device_friendly_name} Reactive Power QII"
+    # reactive_power_qiii:
+    #   name: "${device_friendly_name} Reactive Power QIII"
+    # reactive_power_qiv:
+    #   name: "${device_friendly_name} Reactive Power QIV"
+    # energy_positive_reactive:
+    #   name: "${device_friendly_name} Positive reactive energy (Q+)"
+    # energy_negative_reactive:
+    #   name: "${device_friendly_name} Negative reactive energy (Q-)"
+    # energy_negative_reactive_tariff1:
+    #   name: "${device_friendly_name} Megative reactive energy (Q-) in tariff T1"
+
+  - platform: uptime
+    name: "${device_friendly_name} Uptime"
+  - platform: wifi_signal
+    name: "${device_friendly_name} Wi-Fi RSSI Signal"
+    update_interval: 60s
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "${device_friendly_name} IP Address"
+    ssid:
+      name: "${device_friendly_name} Wi-Fi SSID"
+    bssid:
+      name: "${device_friendly_name} Wi-Fi BSSID"
+
+  - platform: dsmr
+    identification:
+      name: "${device_friendly_name} Identification"
+    equipment_id:
+      name: "${device_friendly_name} Equipment Id"
+    breaker_status:
+      name: "${device_friendly_name} Breaker Status"
