@@ -27,7 +27,7 @@ esp32:
 
 # Cloned from https://github.com/afarago/dsmr
 external_components:
-  - source: github://bakermat-iot/esphome
+  - source: github://bakerflow-iot/esphome
     components: [dsmr]
 
 # Enable status LED - will flash without connection to ESPHome
