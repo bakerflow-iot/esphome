@@ -1,5 +1,4 @@
-# This is an alpha version to allow testing for Hungarian smart meters. 
-# Use at your own risk, there's no guarantee this will work!
+# This is an preview version to allow testing for Hungarian smart meters, tested successfully on Sanxing SX631 meters.
 # Relies on esphome custom component created by https://github.com/afarago/dsmr
 
 substitutions:
@@ -57,7 +56,6 @@ web_server:
   
 # Enable debug logging for live view of P1 sensor data
 logger:
-  #hardware_uart: USB_SERIAL_JTAG
   level: DEBUG
 
 # Setup UART to receive data
@@ -78,93 +76,59 @@ dsmr:
 sensor:
   - platform: dsmr
     energy_delivered:
-      name: "${device_friendly_name} Energy Consumed"
+      name: "Energy Consumed"
     energy_delivered_tariff1:
-      name: "${device_friendly_name} Energy Consumed Tariff 1"
+      name: "Energy Consumed Tariff 1"
     energy_delivered_tariff2:
-      name: "${device_friendly_name} Energy Consumed Tariff 2"
+      name: "Energy Consumed Tariff 2"
     energy_returned:
-      name: "${device_friendly_name} Energy Produced"
+      name: "Energy Produced"
     energy_returned_tariff1:
-      name: "${device_friendly_name} Energy Produced Tariff 1"
+      name: "Energy Produced Tariff 1"
     energy_returned_tariff2:
-      name: "${device_friendly_name} Energy Produced Tariff 2"
+      name: "Energy Produced Tariff 2"
     power_delivered:
-      name: "${device_friendly_name} Power Consumed"
+      name: "Power Consumed"
     power_returned:
-      name: "${device_friendly_name} Power Produced"
-    # electricity_threshold: # missing unit
-    #   name: "${device_friendly_name} Electricity Threshold"
+      name: "Power Produced"
     electricity_tariff:
-      name: "${device_friendly_name} Electricity Tariff"
+      name: "Electricity Tariff"
     frequency:
-      name: "${device_friendly_name} Frequency"
+      name: "Frequency"
     energy_absolute:
-      name: "${device_friendly_name} Absolute active energy"
-      
+      name: "Absolute active energy"
     voltage_l1:
-      name: "${device_friendly_name} Voltage Phase 1"
+      name: "Voltage Phase 1"
     voltage_l2:
-      name: "${device_friendly_name} Voltage Phase 2"
+      name: "Voltage Phase 2"
     voltage_l3:
-      name: "${device_friendly_name} Voltage Phase 3"
+      name: "Voltage Phase 3"
     current_l1:
-      name: "${device_friendly_name} Current Phase 1"
+      name: "Current Phase 1"
     current_l2:
-      name: "${device_friendly_name} Current Phase 2"
+      name: "Current Phase 2"
     current_l3:
-      name: "${device_friendly_name} Current Phase 3"
-
-    # reactive_energy_qi:
-    #   name: "${device_friendly_name} Reactive Energy QI"
-    # reactive_energy_qii:
-    #   name: "${device_friendly_name} Reactive Energy QII"
-    # reactive_energy_qiii:
-    #   name: "${device_friendly_name} Reactive Energy QIII"
-    # reactive_energy_qiv:
-    #   name: "${device_friendly_name} Reactive Energy QIV"
-    # instantaneous_power_factor:
-    #   name: "${device_friendly_name} Instantaneous Power Factor"
-    # instantaneous_power_factor_l1:
-    #   name: "${device_friendly_name} Instantaneous Power Factor Phase 1"
-    # instantaneous_power_factor_l2:
-    #   name: "${device_friendly_name} Instantaneous Power Factor Phase 2"
-    # instantaneous_power_factor_l3:
-    #   name: "${device_friendly_name} Instantaneous Power Factor Phase 3"
-    # reactive_power_qi:
-    #   name: "${device_friendly_name} Reactive Power QI"
-    # reactive_power_qii:
-    #   name: "${device_friendly_name} Reactive Power QII"
-    # reactive_power_qiii:
-    #   name: "${device_friendly_name} Reactive Power QIII"
-    # reactive_power_qiv:
-    #   name: "${device_friendly_name} Reactive Power QIV"
-    # energy_positive_reactive:
-    #   name: "${device_friendly_name} Positive reactive energy (Q+)"
-    # energy_negative_reactive:
-    #   name: "${device_friendly_name} Negative reactive energy (Q-)"
-    # energy_negative_reactive_tariff1:
-    #   name: "${device_friendly_name} Megative reactive energy (Q-) in tariff T1"
+      name: "Current Phase 3"
 
   - platform: uptime
-    name: "${device_friendly_name} Uptime"
+    name: "Uptime"
   - platform: wifi_signal
-    name: "${device_friendly_name} Wi-Fi RSSI Signal"
+    name: "Wi-Fi RSSI Signal"
     update_interval: 60s
 
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "${device_friendly_name} IP Address"
+      name: "IP Address"
     ssid:
-      name: "${device_friendly_name} Wi-Fi SSID"
+      name: "Wi-Fi SSID"
     bssid:
-      name: "${device_friendly_name} Wi-Fi BSSID"
+      name: "Wi-Fi BSSID"
 
   - platform: dsmr
     identification:
-      name: "${device_friendly_name} Identification"
+      name: "Identification"
     equipment_id:
-      name: "${device_friendly_name} Equipment Id"
+      name: "Equipment Id"
     breaker_status:
-      name: "${device_friendly_name} Breaker Status"
+      name: "Breaker Status"
