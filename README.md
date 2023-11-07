@@ -1,4 +1,4 @@
-## P1 Primo Examples
+# P1 Primo Examples
 
 This repo contains sample ESPHome configurations for Bakerflow solutions to get started.
 
