@@ -1,0 +1,141 @@
+# This is an preview version to allow testing for Hungarian smart meters, tested successfully on Sanxing SX631 meters.
+# Relies on esphome custom component created by https://github.com/afarago/dsmr
+
+substitutions:
+  device_name: bakerflow-p1-primo
+  device_description: "Bakerflow P1 Primo: Valós idejű elektromos fogyasztásmérő"
+  friendly_name: Bakerflow P1 Primo
+  project_name: bakerflow.p1_primo
+  version: 2.3.0hu
+
+esphome:
+  name: ${device_name}
+  comment: "${device_description}" 
+  project: 
+    name: ${project_name}
+    version: ${version}
+  platformio_options:
+    upload_speed: 921600
+    platform: espressif32@6.4.0
+    
+esp32:
+  board: esp32-c3-devkitm-1
+  framework: 
+    type: arduino
+    version: 2.0.11
+
+# Cloned from https://github.com/afarago/dsmr
+external_components:
+  - source: github://bakerflow-iot/esphome
+    components: [dsmr]
+    refresh: 60s
+
+# Enable status LED - will flash without connection to ESPHome
+status_led:
+  pin:
+    number: 7
+
+api:
+
+ota:
+
+wifi:
+
+# Enable captive portal after 60 seconds of no Wi-Fi connection.
+# Uses channel 11 by default.
+  ap:
+    ssid: ${device_name}
+    channel: 11
+    ap_timeout: 60s
+
+captive_portal:
+
+# Enable web interface to view stats
+web_server:
+  port: 80
+  
+# Enable debug logging for live view of P1 sensor data
+logger:
+  level: DEBUG
+
+# Setup UART to receive data
+uart:
+  baud_rate: 115200
+  # This might need to be increased to 3000 to accommodate the telegram length
+  rx_buffer_size: 3000
+  rx_pin:
+    number: 10
+    inverted: true
+
+dsmr:
+ id: dsmr_instance
+ # Change telegram length to cater for larger telegrams in HU
+ max_telegram_length: 3000
+ receive_timeout: 2000ms
+
+sensor:
+  - platform: dsmr
+    energy_delivered:
+      name: "05 Fogyasztott energia"
+    energy_delivered_tariff1:
+      name: "06 Fogyasztott energia tarifa 1"
+    energy_delivered_tariff2:
+      name: "07 Fogyasztott energia tarifa 2"
+    energy_returned:
+      name: "08 Termelt energia"
+    energy_returned_tariff1:
+      name: "09 Termelt energia tarifa 1"
+    energy_returned_tariff2:
+      name: "10 Termelt energia tarifa 2"
+    power_delivered:
+      name: "11 Fogyasztott teljesítmény"
+    power_returned:
+      name: "12 Termelt teljesítmény"
+    electricity_tariff:
+      name: "13 Aktuális tarifa"
+    frequency:
+      name: "20 Hálózati frekvencia"
+    energy_absolute:
+      name: "04 Abszolút aktív energia"
+    voltage_l1:
+      name: "14 Feszültség L1"
+    voltage_l2:
+      name: "15 Feszültség L2"
+    voltage_l3:
+      name: "16 Feszültség L3"
+    current_l1:
+      name: "17 Áram L1"
+    current_l2:
+      name: "18 Áram L2"
+    current_l3:
+      name: "19 Áram L3"
+
+  - platform: uptime
+    name: "28 Üzemidő"
+  - platform: wifi_signal
+    name: "27 Wi-Fi Hálózat jelszint"
+    update_interval: 60s
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: "23 Wi-Fi Hálózat IP címe"
+    ssid:
+      name: "26 Wi-Fi Hálózat neve"
+    bssid:
+      name: "25 Wi-Fi Router MAC címe"
+    mac_address:
+      name: "24 Wi-Fi ESP MAC címe"
+
+  - platform: dsmr
+    identification:
+      name: "01 Azonosító"
+    equipment_id:
+      name: "02 Mérő gyáriszám"
+    breaker_status:
+      name: "03 Megszkító állapot"
+    p1_version:
+      name: "21 DSMR Vezió"
+  - platform: version
+    name: "22 ESPHome Verzió"
+    hide_timestamp: true
