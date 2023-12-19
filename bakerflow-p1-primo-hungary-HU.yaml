@@ -133,7 +133,7 @@ text_sensor:
     equipment_id:
       name: "02 Mérő gyáriszám"
     breaker_status:
-      name: "03 Megszkító állapot"
+      name: "03 Megszakító állapot"
     p1_version:
       name: "21 DSMR Vezió"
   - platform: version
