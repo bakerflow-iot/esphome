@@ -1,3 +1,7 @@
+# This is a generic configuration that's been tested for the Benelux region.
+# It has gas_delivered disabled to avoid potential errors for modern homes without gas
+# Uncomment lines where applicable.
+
 substitutions:
   device_name: bakerflow-p1-primo
   device_description: "Bakerflow P1 Primo: real-time monitoring of your energy usage"
@@ -98,12 +102,12 @@ sensor:
       accuracy_decimals: 0
       filters:
         - multiply: 1000
-    electricity_failures:
-      name: "Electricity Failures"
-      icon: mdi:alert
-    electricity_long_failures:
-      name: "Long Electricity Failures"
-      icon: mdi:alert
+    # electricity_failures:
+    #   name: "Electricity Failures"
+    #   icon: mdi:alert
+    # electricity_long_failures:
+    #   name: "Long Electricity Failures"
+    #   icon: mdi:alert
     voltage_l1:
       name: "Voltage Phase 1"
     voltage_l2:
@@ -158,12 +162,12 @@ sensor:
       accuracy_decimals: 0
       filters:
         - multiply: 1000
-    gas_delivered:
-      name: "Gas Consumed"
-      state_class: total_increasing
-    gas_delivered_be:
-      name: "Gas Consumed Belgium"
-      state_class: total_increasing
+    #gas_delivered:
+    #  name: "Gas Consumed"
+    #  state_class: total_increasing
+    #gas_delivered_be:
+    #  name: "Gas Consumed Belgium"
+    #  state_class: total_increasing
   - platform: uptime
     name: "Uptime"
   - platform: wifi_signal
